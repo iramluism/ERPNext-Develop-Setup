@@ -1,0 +1,78 @@
+version: '2'
+
+services:
+  
+  gsi_erpnext_int_app:
+    build:
+      dockerfile: images/DockerfileERP
+      context: .
+    container_name: gsi_erpnext_int_app
+    volumes_from:
+      - gsi_erpnext_app
+    networks:
+      gsi_erpnext_network:
+        aliases:
+          - gsi_erpnext_int_app
+        ipv4_address: 172.85.0.5
+  
+  gsi_erpnext_app:
+    image: pipech/erpnext-docker-debian:13-F17.1_E17.0-py3
+    container_name: gsi_erpnext_app
+    environment:
+      - ERPNEXT_VERSION=${ERPNEXT_VERSION}
+
+        # site config
+      - DB_NAME=${DB_NAME}
+      - DB_PORT=${DB_PORT}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - DB_HOST=${DB_HOST}
+      - SITE_NAME=${SITE_NAME}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+
+      - DEVELOPER_MODE=${DEVELOPER_MODE}
+      - FRAPPE_APPS=${FRAPPE_APPS}
+    ports:
+      - "8000:8000"
+      - "9000:9000"
+      - "6787:6787"
+    volumes:
+      - ./bench/apps:/home/frappe/bench/apps
+      - ./config/erpnext/init.sh:/home/frappe/bench/init.sh
+    stdin_open: true
+    tty: true
+#    command: ["bash", "/home/frappe/bench/init.sh"]
+    networks:
+      gsi_erpnext_network:
+        aliases:
+          - gsi_erpnext_app
+        ipv4_address: 172.85.0.2
+
+  gsi_erpnext_db:
+    container_name: gsi_erpnext_db
+    image: mariadb:latest
+    environment:
+      - MARIADB_ROOT_PASSWORD=12345
+      - MARIADB_DATABASE=gsi_db
+      - MARIADB_USER=gsi_db
+      - MARIADB_USER_PASSWORD=12345
+    volumes:
+      - ./config/mariadb/mariadb.cnf:/etc/mysql/mariadb.conf.d/frappe.cnf
+      - mariadb-data-volumes:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      gsi_erpnext_network:
+        aliases:
+            - gsi_erpnext_db
+        ipv4_address: 172.85.0.3
+
+networks:
+  gsi_erpnext_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.85.0.0/16
+
+volumes:
+  mariadb-data-volumes:

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="RemoteMappingsManager">
+    <list>
+      <list>
+        <remote-mappings server-id="python@docker-compose://[/home/iramluism/GSI/ERP/docker-compose.yml]:gsi_erpnext_int_app//home/frappe/bench/env/bin/python3">
+          <settings>
+            <list>
+              <mapping local-root="$PROJECT_DIR$/bench/apps/gsi_remote_server" remote-root="/opt/project/bench/apps/gsi_remote_server" />
+              <mapping local-root="$PROJECT_DIR$/bench/apps/gsi_erpnext" remote-root="/opt/project/bench/apps/gsi_erpnext" />
+            </list>
+          </settings>
+        </remote-mappings>
+      </list>
+    </list>
+  </component>
+</project>
