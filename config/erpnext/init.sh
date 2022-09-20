@@ -4,6 +4,8 @@ set -euxo pipefail
 
 get_app()
 {
+    sudo chown frappe:frappe -R apps
+
     apps=$*
     for app in $apps; do
       bench get-app --overwrite --branch develop "$app"
@@ -13,8 +15,8 @@ get_app()
 init_site()
 {
 
-    bench config set-common-config -c root_password "${DB_ROOT_PASSWORD}"
-    bench config set-common-config -c admin_password "${ADMIN_PASSWORD}"
+    bench config set-common-config -c root_password "mysql"
+    bench config set-common-config -c admin_password "admin"
 
     bench new-site \
     --force \
@@ -43,6 +45,6 @@ init_site()
 
 get_app "https://gitlab.generalsoftwareinc.com/h2o/gsi_erpnext" "https://gitlab.generalsoftwareinc.com/h2o/gsi_remote_server"
 
-init_site --apps erpnext gsi_erpnext gsi_remote_server
+init_site erpnext gsi_erpnext gsi_remote_server
 
 set +euxo pipefail
