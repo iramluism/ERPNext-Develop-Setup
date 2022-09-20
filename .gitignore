@@ -1,2 +1,3 @@
 
 bench/apps/*
+.env
