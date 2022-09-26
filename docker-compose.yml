@@ -21,7 +21,7 @@ services:
 
   redis-cache:
     restart: always
-    container_name: gsi.redis.socketio.dev.local.com
+    container_name: gsi.redis.cache.dev.local.com
     image: redis:alpine
 
   redis-queue:
@@ -64,13 +64,13 @@ services:
       - 8000-8005:8000-8005
       - 9000-9005:9000-9005
 
-  frappe_debugger:
-    image: frappe/bench:latest
-    container_name: gsi.erpnext.debugger.dev.local.com
-    volumes_from:
-      - frappe
-    env_file:
-      - .env
+#  frappe_debugger:
+#    image: frappe/bench:latest
+#    container_name: gsi.erpnext.debugger.dev.local.com
+#    volumes_from:
+#      - frappe
+#    env_file:
+#      - .env
 
 volumes:
   mariadb-data:
