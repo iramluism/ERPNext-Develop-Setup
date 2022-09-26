@@ -1,6 +1,0 @@
-FROM pipech/erpnext-docker-debian:13-F17.1_E17.0-py3 as gsi_erpnext_image
-COPY ./bench/apps/gsi_erpnext /home/frappe/bench/apps/gsi_erpnext
-COPY ./bench/apps/gsi_remote_server /home/frappe/bench/apps/gsi_remote_server
-RUN sudo chown frappe:frappe -R apps
-RUN env/bin/pip install -q -e /home/frappe/bench/apps/gsi_erpnext
-RUN env/bin/pip install -q -e /home/frappe/bench/apps/gsi_remote_server
