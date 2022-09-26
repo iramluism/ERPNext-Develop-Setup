@@ -14,8 +14,8 @@ services:
     ports:
     - 3306:3306
     environment:
-      - MARIADB_PASSWORD=${DB_ROOT_PASSWORD:-12345}
-      - MARIADB_ROOT_PASSWORD=${DB_ROOT_PASSWORD:-12345}
+      - MARIADB_PASSWORD=${DB_ROOT_PASSWORD:-123}
+      - MARIADB_ROOT_PASSWORD=${DB_ROOT_PASSWORD:-123}
     volumes:
       - mariadb-data:/var/lib/mysql
 
@@ -51,11 +51,13 @@ services:
       - FRAPPE_VERSION=${FRAPPE_VERSION:-version-14}
       - ERPNEXT_VERSION=${ERPNEXT_VERSION:-version-14}
       #- CUSTOM_APPS=$CUSTOM_APPS
-      - DB_ROOT_PASSWORD=${DB_ROOT_PASSWORD:-12345}
+      - SERVER_PORT=${SERVER_PORT:-8000}
+      - DB_ROOT_PASSWORD=${DB_ROOT_PASSWORD:-123}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD:-12345}
       - SITE_NAME=${SITE_NAME:-gsi.erpnext.dev.local.com}
       - DEVELOPER_MODE=${DEVELOPER_MODE:-1}
       - DB_NAME=${DB_NAME:-gsi_db}
+      - DEV_SERVER=1
     volumes:
       - ..:/workspace:cached
       - ./src:/home/frappe/frappe-bench

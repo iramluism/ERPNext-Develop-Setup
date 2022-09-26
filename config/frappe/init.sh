@@ -4,11 +4,11 @@ init(){
 
     sudo chown frappe:frappe -R .
 
-    bench init --version=version-14 --skip-redis-config-generation --no-procfile --verbose --python python3.10 --ignore-exist .
+    bench init --version="${FRAPPE_VERSION}" --skip-redis-config-generation --no-procfile --verbose --python python3.10 --ignore-exist .
 
     bench get-app payments
 
-    bench get-app --branch version-14 --resolve-deps erpnext
+    bench get-app --branch "${ERPNEXT_VERSION}" erpnext
 
     bench get-app hrms
 
@@ -29,7 +29,9 @@ init(){
 
     bench config set-common-config -c root_password "mysql"
     bench config set-common-config -c admin_password "admin"
+}
 
+new_site(){
     bench new-site \
       --force \
       --db-host mariadb \
@@ -37,7 +39,7 @@ init(){
       --db-password "${DB_PASSWORD}" \
       --mariadb-root-password "${DB_ROOT_PASSWORD}" \
       --admin-password "${ADMIN_PASSWORD}" \
-    "${SITE_NAME}"
+      "${SITE_NAME}"
 
     bench use "${SITE_NAME}"
 
@@ -53,14 +55,17 @@ init(){
     bench clear-cache
 }
 
+
 if [ ! -d apps ]
 then
-  init
+  init # Create bench folder and install the erpnext app
+  new_site # Create new frappe site
 fi
+
 
 if [ "$DEV_SERVER" = 1 ]
 then
-  bench server --port 8000
+  bench serve --port "$SERVER_PORT"
 fi
 
 
